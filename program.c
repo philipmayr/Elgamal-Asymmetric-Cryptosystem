@@ -248,6 +248,25 @@ integer find_least_primitive_root(integer prime_number)
     return primitive_root;
 }
 
+integer find_modular_multiplicative_inverse(integer multiplicand, integer modulus)
+{
+    if (find_greatest_common_divisor(multiplicand, modulus) != 1)
+    {
+        return -1;
+    }
+    
+    integer modular_multiplicative_inverse_candidate = 0;
+    
+    while ((multiplicand * modular_multiplicative_inverse_candidate % modulus != 1) || modular_multiplicative_inverse_candidate < modulus)
+    {
+        modular_multiplicative_inverse_candidate++;
+    }
+    
+    integer modular_multiplicative_inverse = modular_multiplicative_inverse_candidate;
+
+    return modular_multiplicative_inverse;
+}
+
 integer main()
 {
     srand(time(NULL));
@@ -277,6 +296,21 @@ integer main()
     printf("Transmitter's copy of shared secret key: %ld", transmitter_copy_shared_secret_key);
     printf("\n");
     printf("Receiver's copy of shared secret key:    %ld", receiver_copy_shared_secret_key);
+    
+    printf("\n");
+    printf("\n");
+    
+    constant_integer message = generate_random_integer(1, public_prime_modulus - 1);
+    printf("Clear message: %ld", message);
+    
+    printf("\n");
+
+    constant_integer secret_message = (message * receiver_copy_shared_secret_key) % public_prime_modulus;
+    printf("Secret message: %ld", secret_message);
+    
+    constant_integer secret_message_inverse = find_modular_multiplicative_inverse(secret_message, public_prime_modulus);
+    
+    // decrypted_secret_message = 
     
     return 0;
 }
