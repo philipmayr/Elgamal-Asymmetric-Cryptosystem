@@ -257,7 +257,7 @@ integer find_modular_multiplicative_inverse(integer multiplicand, integer modulu
     
     integer modular_multiplicative_inverse_candidate = 0;
     
-    while ((multiplicand * modular_multiplicative_inverse_candidate % modulus != 1) || modular_multiplicative_inverse_candidate < modulus)
+    while ((multiplicand * modular_multiplicative_inverse_candidate % modulus != 1) && modular_multiplicative_inverse_candidate < modulus)
     {
         modular_multiplicative_inverse_candidate++;
     }
@@ -271,7 +271,7 @@ integer main()
 {
     srand(time(NULL));
 
-    constant_integer bit_length = 16;
+    constant_integer bit_length = 8;
     
     // set domain parameters
     constant_integer public_prime_modulus = generate_prime_number(bit_length);
@@ -308,9 +308,15 @@ integer main()
     constant_integer secret_message = (message * receiver_copy_shared_secret_key) % public_prime_modulus;
     printf("Secret message: %ld", secret_message);
     
-    constant_integer secret_message_inverse = find_modular_multiplicative_inverse(secret_message, public_prime_modulus);
+    printf("\n");
     
-    // decrypted_secret_message = 
+    constant_integer shared_secret_inverse = find_modular_multiplicative_inverse(receiver_copy_shared_secret_key, public_prime_modulus);
+    
+    printf("\n");
+    printf("Shared secret inverse: %ld", shared_secret_inverse);
+    
+    constant_integer decrypted_secret_message = shared_secret_inverse * secret_message % public_prime_modulus;
+    printf("\nSecret message: %ld", decrypted_secret_message);
     
     return 0;
 }
