@@ -1,4 +1,4 @@
-// El Gamal Cryptosystem
+// Implementation of Elgamal Cryptosystem
 
 #include <math.h>
 #include <time.h>
@@ -240,9 +240,7 @@ integer find_least_primitive_root(integer prime_number)
             goto iterate_over_distinct_prime_factors;
         }
         else if (index == number_of_primitive_roots - 1)
-        {
             return primitive_root;
-        }
     }
     
     return primitive_root;
