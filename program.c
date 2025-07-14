@@ -293,11 +293,10 @@ integer main()
     printf("\n");
     printf("Receiver's copy of shared secret key:    %ld", receiver_copy_shared_secret_key);
     
-    printf("\n");
-    printf("\n");
-    
+    printf("\n\n");
+
     constant_integer message = generate_random_integer(1, public_prime_modulus - 1);
-    printf("Clear (uncrypted) message: %ld", message);
+    printf("Clear (uncrypted) message:  %ld", message);
     
     printf("\n");
 
@@ -309,7 +308,7 @@ integer main()
     constant_integer shared_secret_inverse = find_modular_multiplicative_inverse(receiver_copy_shared_secret_key, public_prime_modulus);
     
     constant_integer decrypted_secret_message = shared_secret_inverse * secret_message % public_prime_modulus;
-    printf("Clear (decrypted) message: %ld", decrypted_secret_message);
+    printf("Clear (decrypted) message:  %ld", decrypted_secret_message);
     
     return 0;
 }
