@@ -39,6 +39,22 @@ integer find_binary_logarithm(integer number)
     return logarithm;
 }
 
+double find_square_root(double square)
+{
+    double x = square;
+    double y = 1;
+    
+    double epsilon = 0.000001;
+    
+    while ((x - y) > epsilon)
+    {
+        x = (x + y) / 2;
+        y = square / x;
+    }
+    
+    return x;
+}
+
 integer * find_distinct_prime_factors(integer number, integer * upper_bound)
 {
     integer * distinct_prime_factors = malloc(sizeof (integer) * * upper_bound);
@@ -54,7 +70,7 @@ integer * find_distinct_prime_factors(integer number, integer * upper_bound)
         do number >>= 1; while (~number & 1);
     }
     
-    for (integer factor_candidate = 3; factor_candidate <= sqrt(number); factor_candidate += 2)
+    for (integer factor_candidate = 3; factor_candidate <= find_square_root(number); factor_candidate += 2)
     {
         if (number % factor_candidate == 0) 
         {
@@ -95,7 +111,7 @@ integer * find_prime_factors(integer number, integer * upper_bound)
         index++;
     }
     
-    for (integer factor_candidate = 3; factor_candidate <= sqrt(number); factor_candidate += 2)
+    for (integer factor_candidate = 3; factor_candidate <= find_square_root(number); factor_candidate += 2)
     {
         while (number % factor_candidate == 0)
         {
