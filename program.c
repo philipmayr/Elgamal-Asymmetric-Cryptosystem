@@ -1,10 +1,11 @@
 // Implementation of Elgamal Cryptosystem
 
-#include <math.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+
+#define NATURAL_LOGARITHM_BASE 2.718281828459045235357
 
 typedef uint64_t integer;
 typedef const uint64_t constant_integer;
@@ -37,6 +38,15 @@ integer find_binary_logarithm(integer number)
     while (number >>= 1) logarithm++;
     
     return logarithm;
+}
+
+double find_natural_logarithm(double number)
+{
+    double inverse_of_binary_logarithm_of_natural_logarithm_base = 1.0 / find_binary_logarithm(NATURAL_LOGARITHM_BASE);
+    
+    double natural_logarithm = find_binary_logarithm(number) * inverse_of_binary_logarithm_of_natural_logarithm_base;
+    
+    return natural_logarithm;
 }
 
 double find_square_root(double square)
@@ -241,7 +251,7 @@ integer find_least_primitive_root(integer prime_number)
     
     integer * primitive_roots = malloc(sizeof (int) * number_of_primitive_roots);
     
-    integer upper_bound = log(prime_number) / log(log(prime_number_less_one));
+    integer upper_bound = find_natural_logarithm(prime_number) / find_natural_logarithm(find_natural_logarithm(prime_number_less_one));
         
     integer * distinct_prime_factors = find_distinct_prime_factors(prime_number_less_one, & upper_bound);
     
