@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define EXPONENTIAL_CONSTANT 2.718281828459045235357
-
 typedef uint64_t integer;
 typedef const uint64_t constant_integer;
+
+const double EXPONENTIAL_CONSTANT = 2.718281828459045235357;
 
 integer generate_random_integer(integer exclusive_lower_bound, integer exclusive_upper_bound)
 {
