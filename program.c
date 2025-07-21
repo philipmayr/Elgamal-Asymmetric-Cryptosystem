@@ -10,7 +10,7 @@ typedef const uint64_t constant_integer;
 
 const double EXPONENTIAL_CONSTANT = 2.718281828459045235357;
 
-integer generate_random_integer(integer exclusive_lower_bound, integer exclusive_upper_bound)
+integer draw_random_integer(integer exclusive_lower_bound, integer exclusive_upper_bound)
 {
     return rand() % (exclusive_upper_bound - exclusive_lower_bound + 1) + exclusive_lower_bound;
 }
