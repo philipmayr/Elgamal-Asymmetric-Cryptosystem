@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define NATURAL_LOGARITHM_BASE 2.718281828459045235357
+#define EXPONENTIAL_CONSTANT 2.718281828459045235357
 
 typedef uint64_t integer;
 typedef const uint64_t constant_integer;
@@ -31,22 +31,22 @@ integer find_totient(integer number)
     return totient;
 }
 
-integer find_binary_logarithm(integer number)
+integer depotentiate_binarily(integer number)
 {
-    integer logarithm = 1;
+    integer exponent = 1;
     
-    while (number >>= 1) logarithm++;
+    while (number >>= 1) exponent++;
     
-    return logarithm;
+    return exponent;
 }
 
-double find_natural_logarithm(double number)
+double depotentiate_by_exponential_constant(double number)
 {
-    double inverse_of_binary_logarithm_of_natural_logarithm_base = 1.0 / find_binary_logarithm(NATURAL_LOGARITHM_BASE);
+    double inverse_of_binary_depotentiation_of_exponential_constant = 1.0 / depotentiate_binarily(EXPONENTIAL_CONSTANT);
     
-    double natural_logarithm = find_binary_logarithm(number) * inverse_of_binary_logarithm_of_natural_logarithm_base;
+    double natural_depotentiation = depotentiate_binarily(number) * inverse_of_binary_depotentiation_of_exponential_constant;
     
-    return natural_logarithm;
+    return natural_depotentiation;
 }
 
 double find_square_root(double square)
@@ -251,7 +251,7 @@ integer find_least_primitive_root(integer prime_number)
     
     integer * primitive_roots = malloc(sizeof (int) * number_of_primitive_roots);
     
-    integer upper_bound = find_natural_logarithm(prime_number) / find_natural_logarithm(find_natural_logarithm(prime_number_less_one));
+    integer upper_bound = depotentiate_by_exponential_constant(prime_number) / depotentiate_by_exponential_constant(depotentiate_by_exponential_constant(prime_number_less_one));
         
     integer * distinct_prime_factors = find_distinct_prime_factors(prime_number_less_one, & upper_bound);
     
