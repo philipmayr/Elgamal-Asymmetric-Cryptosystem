@@ -286,6 +286,20 @@ integer find_modular_multiplicative_inverse(integer multiplicand, integer modulu
     return modular_multiplicative_inverse;
 }
 
+integer get_padding(integer number)
+{
+    if (number < 10)
+        return 4;
+    else if (number < 100)
+        return 3;
+    else if (number < 1000)
+        return 2;
+    else if (number < 10000)
+        return 1;
+    else
+        return 0;
+}
+
 integer main()
 {
     srand(time(NULL));
@@ -319,19 +333,40 @@ integer main()
     printf("\n\n");
 
     const integer message = draw_random_integer(1, public_prime_modulus - 1);
-    printf("Clear (uncrypted) message:  %ld", message);
+    
+    integer spaces = get_padding(message);
+        
+    printf("Clear (uncrypted) message:  ");
+    
+    for (integer iteration = 0; iteration < spaces; iteration++) printf(" ");
+    
+    printf("%ld", message);
     
     printf("\n");
 
     const integer secret_message = (message * receiver_copy_shared_secret_key) % public_prime_modulus;
-    printf("Secret (encrypted) message: %ld", secret_message);
+    
+    spaces = get_padding(secret_message);
+        
+    printf("Secret (encrypted) message: ");
+        
+    for (integer iteration = 0; iteration < spaces; iteration++) printf(" ");
+    
+    printf("%ld", secret_message);
     
     printf("\n");
     
     const integer shared_secret_inverse = find_modular_multiplicative_inverse(receiver_copy_shared_secret_key, public_prime_modulus);
     
     const integer decrypted_secret_message = shared_secret_inverse * secret_message % public_prime_modulus;
-    printf("Clear (decrypted) message:  %ld", decrypted_secret_message);
     
+    spaces = get_padding(decrypted_secret_message);
+        
+    printf("Clear (decrypted) message:  ");
+    
+    for (integer iteration = 0; iteration < spaces; iteration++) printf(" ");
+    
+    printf("%ld", decrypted_secret_message);
+
     return 0;
 }
