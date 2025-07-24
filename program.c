@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 typedef uint64_t integer;
-typedef const uint64_t constant_integer;
 
 const double EXPONENTIAL_CONSTANT = 2.718281828459045235357;
 
@@ -188,20 +187,20 @@ integer test_primality(integer prime_candidate, integer rounds)
     if (~prime_candidate & 1 || prime_candidate < 2) return 0;
     
     integer greatest_power_of_two_factor_of_prime_candidate_less_one = 1;
-    constant_integer prime_candidate_less_one = prime_candidate - 1;
+    const integer prime_candidate_less_one = prime_candidate - 1;
 
     while (prime_candidate_less_one % exponentiate(2, greatest_power_of_two_factor_of_prime_candidate_less_one) == 0) 
         greatest_power_of_two_factor_of_prime_candidate_less_one++;
 
     greatest_power_of_two_factor_of_prime_candidate_less_one--;
     
-    constant_integer multiplier = prime_candidate_less_one / exponentiate(2, greatest_power_of_two_factor_of_prime_candidate_less_one);
+    const integer multiplier = prime_candidate_less_one / exponentiate(2, greatest_power_of_two_factor_of_prime_candidate_less_one);
     
     for (integer round = 1; round < rounds; round++)
     {
         // get random base
-        integer base = generate_random_integer(1, prime_candidate_less_one);
-        constant_integer greatest_common_divisor = find_greatest_common_divisor(base, prime_candidate);
+        integer base = draw_random_integer(1, prime_candidate_less_one);
+        const integer greatest_common_divisor = find_greatest_common_divisor(base, prime_candidate);
         
         if (greatest_common_divisor > 1 && greatest_common_divisor < prime_candidate) return 0;
     
@@ -223,13 +222,13 @@ integer test_primality(integer prime_candidate, integer rounds)
     return 1;
 }
 
-integer generate_prime_number(integer bit_length)
+integer draw_random_prime_number(integer bit_length)
 {
     for (;;)
     {
-        integer random_integer = generate_random_integer(0, (1 << bit_length) + 1);
+        integer random_integer = draw_random_integer(0, (1 << bit_length) + 1);
         
-        constant_integer bit_mask = (1 << (bit_length - 1)) | 1;
+        const integer bit_mask = (1 << (bit_length - 1)) | 1;
         
         random_integer |= bit_mask;
         
@@ -291,27 +290,27 @@ integer main()
 {
     srand(time(NULL));
 
-    constant_integer bit_length = 16;
+    const integer bit_length = 16;
     
     // set domain parameters
-    constant_integer public_prime_modulus = generate_prime_number(bit_length);
+    const integer public_prime_modulus = draw_random_prime_number(bit_length);
     integer public_primitive_root = find_least_primitive_root(public_prime_modulus); // generator
 
     // transmitter
-    constant_integer transmitter_private_exponent_key = generate_random_integer(1, public_prime_modulus - 1);
-    constant_integer transmitter_public_power = exponentiate_modularly(public_primitive_root, transmitter_private_exponent_key, public_prime_modulus);
+    const integer transmitter_private_exponent_key = draw_random_integer(1, public_prime_modulus - 1);
+    const integer transmitter_public_power = exponentiate_modularly(public_primitive_root, transmitter_private_exponent_key, public_prime_modulus);
         // -> transmitter sends resulting power to receiver in the clear
     
     // receiver
-    constant_integer receiver_private_exponent_key = generate_random_integer(1, public_prime_modulus - 1);
-    constant_integer receiver_public_power = exponentiate_modularly(public_primitive_root, receiver_private_exponent_key, public_prime_modulus);
+    const integer receiver_private_exponent_key = draw_random_integer(1, public_prime_modulus - 1);
+    const integer receiver_public_power = exponentiate_modularly(public_primitive_root, receiver_private_exponent_key, public_prime_modulus);
         // -> receiver sends resulting power to transmitter in the clear
         
     // transmitter
-    constant_integer transmitter_copy_shared_secret_key = exponentiate_modularly(receiver_public_power, transmitter_private_exponent_key, public_prime_modulus);
+    const integer transmitter_copy_shared_secret_key = exponentiate_modularly(receiver_public_power, transmitter_private_exponent_key, public_prime_modulus);
     
     // receiver
-    constant_integer receiver_copy_shared_secret_key = exponentiate_modularly(transmitter_public_power, receiver_private_exponent_key, public_prime_modulus);
+    const integer receiver_copy_shared_secret_key = exponentiate_modularly(transmitter_public_power, receiver_private_exponent_key, public_prime_modulus);
     
     printf("Transmitter's copy of shared secret key: %ld", transmitter_copy_shared_secret_key);
     printf("\n");
@@ -319,19 +318,19 @@ integer main()
     
     printf("\n\n");
 
-    constant_integer message = generate_random_integer(1, public_prime_modulus - 1);
+    const integer message = draw_random_integer(1, public_prime_modulus - 1);
     printf("Clear (uncrypted) message:  %ld", message);
     
     printf("\n");
 
-    constant_integer secret_message = (message * receiver_copy_shared_secret_key) % public_prime_modulus;
+    const integer secret_message = (message * receiver_copy_shared_secret_key) % public_prime_modulus;
     printf("Secret (encrypted) message: %ld", secret_message);
     
     printf("\n");
     
-    constant_integer shared_secret_inverse = find_modular_multiplicative_inverse(receiver_copy_shared_secret_key, public_prime_modulus);
+    const integer shared_secret_inverse = find_modular_multiplicative_inverse(receiver_copy_shared_secret_key, public_prime_modulus);
     
-    constant_integer decrypted_secret_message = shared_secret_inverse * secret_message % public_prime_modulus;
+    const integer decrypted_secret_message = shared_secret_inverse * secret_message % public_prime_modulus;
     printf("Clear (decrypted) message:  %ld", decrypted_secret_message);
     
     return 0;
